@@ -1,41 +1,40 @@
 import React, {useState} from 'react';
-import Modal from "react-bootstrap/Modal";
-import {Form, Button} from "react-bootstrap";
+import {Button, Form, Modal} from "react-bootstrap";
 import {createType} from "../../http/deviceAPI";
 
 const CreateType = ({show, onHide}) => {
-    const [value, setValue] = useState('')
-
+    const [value, setValue] = useState('');
     const addType = () => {
-        createType({name: value}).then(data => {
+        createType({name: value}).then(() => {
             setValue('')
-            onHide()
-        })
-    }
+            onHide();
+        });
+    };
 
     return (
         <Modal
             show={show}
             onHide={onHide}
+            size="lg"
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить тип
+                <Modal.Title>
+                    Add new Type
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Control
-                        value={value}
+                        placeholder="Input name your type..."
                         onChange={e => setValue(e.target.value)}
-                        placeholder={"Введите название типа"}
+                        value={value}
                     />
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>
-                <Button variant="outline-success" onClick={addType}>Добавить</Button>
+                <Button variant="outline-danger" onClick={onHide}>Close</Button>
+                <Button variant="outline-success" onClick={addType}>Add</Button>
             </Modal.Footer>
         </Modal>
     );
