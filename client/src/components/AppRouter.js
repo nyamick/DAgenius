@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Switch, Route, Redirect} from 'react-router-dom';
+import {Switch, Route, Redirect, Navigate, Routes} from 'react-router-dom';
 
 import {authRouters, publicRouters} from "../routes";
 import {SHOP_ROUTE} from "../utils/consts";
@@ -9,15 +9,15 @@ const AppRouter = () => {
     const {user} = useContext(Context);
 
     return (
-        <Switch>
-            {user.isAuth && user.User.role === "ADMIN" && authRouters.map( ({path, Component}) => {
-                return <Route key={path} path={path} component={Component} exact />
-            })}
-            {publicRouters.map( ({path, Component}) => {
-                return <Route key={path} path={path} component={Component} exact />
-            })}
-            <Redirect to={SHOP_ROUTE} />
-        </Switch>
+        <Routes>
+            {user.isAuth && authRouters.map(({path, Component}) =>
+                <Route key={path} path={path} element={<Component />} />
+            )}
+            {publicRouters.map(({path, Component}) =>
+                <Route key={path} path={path} element={<Component />} />
+            )}
+            <Route path="*" element={<Navigate to={SHOP_ROUTE} />} />
+        </Routes>
     );
 };
 

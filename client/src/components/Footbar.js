@@ -14,22 +14,23 @@ const Footbar = observer(() => {
                     <div className="col-sm-12 col-md-6">
                         <h6>Об интернет-магазине</h6>
                         <p className="text-justify">
-                            Принт футболок на заказ.
-                            Постоянные складские запасы текстильной продукции, футболки, поло, майки, регланы, кенгуру.
-                            Индивидуальный подход.
-                            Современный стиль.
+                            Магазин электроники в подвале сайта предлагает широкий выбор товаров:<br/>
+                            - Продажа электроники и аксессуаров.<br/>
+                            - Постоянное наличие товаров на складе: смартфоны, ноутбуки, планшеты, аксессуары.<br/>
+                            - Индивидуальный подход к каждому клиенту.<br/>
+                            - Современные технологии.<br/>
                         </p>
                     </div>
 
                     <div className="col-xs-6 col-md-3">
                         <h6>Контакты</h6>
                         <ul className="footer-links">
-                            <li>LifeCell: <a href="/">+38(063)565-90-70</a></li>
-                            <li>MTC: <a href="/">+38(066)372-71-02</a></li>
-                            <li>Email: <a href="mailto:linusik5@yandex.ru">linusik5@yandex.ru</a></li>
-                            <li>Skype: <a href="skype:exxus_master?add">exxus_master</a></li>
-                            <li>Telegram: <a href="tg://resolve?domain=@Exxuslee">@exxuslee</a></li>
-                            <li>Viber: <a href="viber://chat?number=%2B380663727102">+38(066)372-71-02</a></li>
+                            <li>Телефон: <a href="/">+7(950)0600600</a></li>
+                            <li>WhatsApp: <a href="/">+7(950)0600600</a></li>
+                            <li>Viber: <a href="/">+7(950)0600600</a></li>
+                            <li>Email: <a href="mailto:electron@mail.ru">electron@mail.ru</a></li>
+                            <li>Zoom: <a href="/">zoom</a></li>
+                            <li>Telegram: <a href="tg://resolve?domain=@electron">@electron</a></li>
                         </ul>
                     </div>
 
@@ -37,7 +38,6 @@ const Footbar = observer(() => {
                         <h6>Быстрые ссылки</h6>
                         <ul className="footer-links">
                             <li><NavLink to={SHOP_ROUTE}>Главная</NavLink></li>
-                            <li><NavLink to={SIZES}>Размеры одежды</NavLink></li>
                             <li><NavLink to={SHIPPINGPAYMANT}>Доставка и оплата</NavLink></li>
                             <li><NavLink to={CONTACTS}>Контакты</NavLink></li>
                             <li><NavLink to={CONTACTS}>Политика конфидицеальности</NavLink></li>

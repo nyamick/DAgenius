@@ -7,7 +7,7 @@ import NavBar from "./components/NavBar/NavBar";
 import Footbar from "./components/Footbar";
 import {Container, Spinner} from "react-bootstrap";
 import {Context} from "./index";
-import {check} from "./http/userApi";
+import {check} from "./http/userAPI";
 import {getDeviceFromBasket} from "./http/deviceAPI";
 
 const App = observer(() => {

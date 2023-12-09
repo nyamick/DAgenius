@@ -215,7 +215,7 @@ class DeviceController {
                             const {img} = req.files;
                             const type = img.mimetype.split('/')[1];
                             let fileName = uuid.v4() + `.${type}`;
-                            img.mv(path.resolve(__dirname, '..', 'static', fileName));
+                            await img.mv(path.resolve(__dirname, '..', 'static', fileName));
                             newVal.img = fileName;
                         }
 

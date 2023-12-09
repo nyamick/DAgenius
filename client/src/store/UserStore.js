@@ -1,5 +1,5 @@
 import {makeAutoObservable} from "mobx";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export default class UserStore {
     constructor() {
@@ -12,7 +12,7 @@ export default class UserStore {
     checkValidToken() {
         let isExpired = false;
         const token = localStorage.getItem('token');
-        const decodedToken = jwt_decode(token);
+        const decodedToken = jwtDecode(token);
         const dateNow = new Date();
 
         if (decodedToken.exp < dateNow.getTime()){

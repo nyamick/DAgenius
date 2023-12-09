@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Col, Container, Dropdown, Form, Image, Modal, Row} from "react-bootstrap";
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {fetchDeleteDevice, fetchOneDevice, updateDevices} from "../http/deviceAPI";
 import {Context} from "../index";
 import {ADMIN_ROUTE} from "../utils/consts";
+import {observer} from "mobx-react-lite";
 
 
-const DevicePageEdit = () => {
+const DevicePageEdit = observer(() => {
     const {device} = useContext(Context);
-    const history = useHistory();
     const {id} = useParams();
     const [deviceCurr, setDeviceCurr] = useState({});
     const [showMsg, setShowMsg] = useState(false);
@@ -23,11 +23,12 @@ const DevicePageEdit = () => {
     const [info, setInfo] = useState([]);
 
     const [isDisabledPutBtn, setDisabledPutBtn] = useState(true);
+    const navigate = useNavigate()
 
     const deleteDevice = () => {
         fetchDeleteDevice(id).then(() => {
-            history.push(ADMIN_ROUTE);
-        })
+            navigate(ADMIN_ROUTE); // Use navigate directly inside the function
+        });
     }
 
     const [show, setShow] = useState(false);
@@ -39,7 +40,7 @@ const DevicePageEdit = () => {
 
         const reader = new FileReader();
         reader.onload = () => {
-            setImg(reader.result);
+            setImg(reader.result.toString());
         };
         reader.readAsDataURL(e.target.files[0]);
         setImgFile(e.target.files[0]);
@@ -121,10 +122,6 @@ const DevicePageEdit = () => {
 
     return (
         <Container className="mt-3">
-            {showMsg && <Row>
-                {msg}
-            </Row>}
-
             <Row>
                 <Col xs={12}>
                     <Row>
@@ -238,13 +235,7 @@ const DevicePageEdit = () => {
                             New Img: <br/>
                             <Image style={{margin: "0 auto", marginTop: 15}} width={150} src={img}/>
                         </Col>}
-                        <Col xs={3} className="d-flex align-items-center">
-                            <Form.Group controlId="formFile" className="mb-3">
-                                <Form.Group>
-                                    <Form.File id="exampleFormControlFile1" label="Upload file" onChange={imgHandler}/>
-                                </Form.Group>
-                            </Form.Group>
-                        </Col>
+
                     </Row>
 
                     {/*Characteristics*/}
@@ -310,7 +301,7 @@ const DevicePageEdit = () => {
             </Modal>
         </Container>
     );
-};
+});
 
 export default DevicePageEdit;
 

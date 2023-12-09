@@ -2,13 +2,13 @@ import React, {useContext, useState} from 'react';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
 import {sendOrder} from "../http/ordersAPI";
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {SHOP_ROUTE} from "../utils/consts";
 
 const Ordering = () => {
     const {basket, user} = useContext(Context);
     const [phone, setPhone] = useState(null);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const buy = () => {
         let order = {
@@ -23,7 +23,7 @@ const Ordering = () => {
         sendOrder(order).then(data => {
             console.log(data);
             basket.setDeleteAllDeviceFromBasket();
-            history.push(SHOP_ROUTE);
+            navigate(SHOP_ROUTE);
         });
     }
     return (
