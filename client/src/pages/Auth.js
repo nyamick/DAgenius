@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 
 import {Button, Card, Container, Form, Row} from "react-bootstrap";
-import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, REGISTRATION_ROUTE, MAIN_ROUTE} from "../utils/consts";
 import {login, registration} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
@@ -25,7 +25,7 @@ const Auth = observer(() => {
             }
             user.setUser(data);
             user.setIsAuth(true);
-            navigate(SHOP_ROUTE);
+            navigate(MAIN_ROUTE);
         } catch (e) {
             alert(e.response.data.message);
         }

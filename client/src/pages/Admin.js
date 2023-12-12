@@ -12,22 +12,23 @@ import {
     Row
 } from "react-bootstrap";
 
-import CreateDevice from "../components/modals/CreateDevice";
+import CreateMusic from "../components/modals/CreateMusic";
 import CreateBrand from "../components/modals/CreateBrand";
 import CreateType from "../components/modals/CreateType";
-import {getAllDevicesInAdminPage} from "../http/deviceAPI";
+import {getAllMusicsInAdminPage} from "../http/musicAPI";
 import {NavLink} from "react-router-dom";
 import {DEVICE_EDIT_ROUTE} from "../utils/consts";
 import DeleteBrandOrType from "../components/modals/DeleteBrandOrType";
+import {text} from "@fortawesome/fontawesome-svg-core";
 
 const Admin = () => {
     const [brandVisible, setBrandVisible] = useState(false);
     const [typeVisible, setTypeVisible] = useState(false);
-    const [deviceVisible, setDeviceVisible] = useState(false);
+    const [musicVisible, setMusicVisible] = useState(false);
     const [deleteBrandOrType, setDeleteBrandOrType] = useState(false);
 
-    const [searchDevice, setSearchDevice] = useState('');
-    const [searchedDevice, setSearchedDevice] = useState([]);
+    const [searchMusic, setSearchMusic] = useState('');
+    const [searchedMusic, setSearchedMusic] = useState([]);
     const [filter, setFilter] = useState("All");
     const [currentPage, setCurrentPage] = useState(1);
     const [count, setCount] = useState(1);
@@ -49,24 +50,24 @@ const Admin = () => {
 
 
     useEffect(() => {
-        getAllDevicesInAdminPage(searchDevice, currentPage, filter).then(({count, rows}) => {
-            setSearchedDevice(rows);
+        getAllMusicsInAdminPage(searchMusic, currentPage, filter).then(({count, rows}) => {
+            setSearchedMusic(rows);
             setCount(count)
         })
     }, [currentPage])
 
     useEffect(() => {
-        getAllDevicesInAdminPage(searchDevice, 1, filter).then(({count, rows}) => {
-            setSearchedDevice(rows);
+        getAllMusicsInAdminPage(searchMusic, 1, filter).then(({count, rows}) => {
+            setSearchedMusic(rows);
             setCount(count);
             setCurrentPage(1);
         })
     }, [filter, successMsg])
 
 
-    const fetchDevice = () => {
-        getAllDevicesInAdminPage(searchDevice, currentPage, filter).then(({count, rows}) => {
-            setSearchedDevice(rows);
+    const fetchMusic = () => {
+        getAllMusicsInAdminPage(searchMusic, currentPage, filter).then(({count, rows}) => {
+            setSearchedMusic(rows);
             setCount(count)
         })
     };
@@ -82,39 +83,39 @@ const Admin = () => {
             {showSuccessMsg && <p>{successMsg}</p>}
             <Button
                 onClick={() => setTypeVisible(true)}
-                variant="outline-dark"
+                variant="outline-success"
                 className="mt-4 p-2"
             >
-                Add type
+                Добавить жанр
             </Button>
             <Button
                 onClick={() => setBrandVisible(true)}
-                variant="outline-dark"
+                variant="outline-success"
                 className="mt-4 p-2"
             >
-                Add brand
+                Добавить лейбл
             </Button>
             <Button
-                onClick={() => setDeviceVisible(true)}
-                variant="outline-dark"
+                onClick={() => setMusicVisible(true)}
+                variant="outline-success"
                 className="mt-4 p-2"
             >
-                Add device
+                Добавить трек
             </Button>
             <Button
                 onClick={() => setDeleteBrandOrType(true)}
-                variant="outline-dark"
+                variant="outline-danger"
                 className="mt-4 p-2"
             >
-                Delete type of brand
+                Удалить жанр или лейбл
             </Button>
-            <CreateDevice show={deviceVisible} onHide={() => setDeviceVisible(false)}/>
+            <CreateMusic show={musicVisible} onHide={() => setMusicVisible(false)}/>
             <CreateBrand show={brandVisible} onHide={() => setBrandVisible(false)}/>
             <CreateType show={typeVisible} onHide={() => setTypeVisible(false)}/>
             <DeleteBrandOrType show={deleteBrandOrType} onHide={() => setDeleteBrandOrType(false)} showSuccessMsgFunc={showSuccessMsgFunc}/>
 
             <Dropdown className="mt-5 mb-3" style={{margin: "0 auto"}}>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                <Dropdown.Toggle variant="outline-success" id="dropdown-basic">
                     {filter}
                 </Dropdown.Toggle>
 
@@ -124,25 +125,10 @@ const Admin = () => {
                 </Dropdown.Menu>
             </Dropdown>
 
-            <InputGroup className="mb-3">
-                <Form.Control
-                    aria-label="Default"
-                    aria-describedby="inputGroup-sizing-default"
-                    value={searchDevice}
-                    onChange={e => setSearchDevice(e.target.value)}
-                    placeholder="Input device name..."
-                />
-                <Button
-                    onClick={fetchDevice}
-                    variant="outline-dark"
-                    className="ml-2"
-                >
-                    Search
-                </Button>
-            </InputGroup>
+
 
             <ListGroup>
-                {searchedDevice && searchedDevice.map( ({id, img, brand, type, price, name}) => {
+                {searchedMusic && searchedMusic.map( ({id, img, brand, type, author, name}) => {
                     return (
                         <ListGroup.Item className="mt-3" key={id}>
                             <Row>
@@ -150,11 +136,7 @@ const Admin = () => {
                                     <Image width={150} src={process.env.REACT_APP_API_URL + img}/>
                                 </Col>
                                 <Col xs={8}>
-                                    <Row>
-                                        <Col xs={12}>
-                                            <NavLink to={DEVICE_EDIT_ROUTE + `/${id}`}>id: {id}</NavLink>
-                                        </Col>
-                                    </Row>
+
                                     <Row>
                                         <Col xs={12}>
                                             Name: {name}
@@ -162,7 +144,7 @@ const Admin = () => {
                                     </Row>
                                     <Row>
                                         <Col xs={12}>
-                                            Price: {price}
+                                            Price: {author}
                                         </Col>
                                     </Row>
                                     <Row>
@@ -177,7 +159,7 @@ const Admin = () => {
                                     </Row>
                                 </Col>
                                 <Col xs={2}>
-                                    <NavLink to={DEVICE_EDIT_ROUTE + `/${id}`}>Edit</NavLink>
+                                    <NavLink to={DEVICE_EDIT_ROUTE + `/${id}`} style={{fontSize: 32}}>Edit</NavLink>
                                 </Col>
                             </Row>
                         </ListGroup.Item>
@@ -185,8 +167,8 @@ const Admin = () => {
                 })}
             </ListGroup>
 
-            <Pagination size="sm" className="mt-4 mb-4" style={{margin: "0 auto"}}>
-                {searchedDevice && searchedDevice.length > 0 ? pages : false}
+            <Pagination size="sm" className="mt-4 mb-4 outline-success" style={{margin: "0 auto"}}>
+                {searchedMusic && searchedMusic.length > 0 ? pages : false}
             </Pagination>
         </Container>
     );

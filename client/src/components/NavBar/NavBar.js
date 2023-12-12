@@ -5,7 +5,7 @@ import {NavLink} from "react-router-dom";
 import {Context} from "../../index";
 
 import {Container, Navbar} from "react-bootstrap";
-import {SHOP_ROUTE} from "../../utils/consts";
+import {MAIN_ROUTE} from "../../utils/consts";
 import TrueAuth from "./preesent-components/trueAuth";
 import FalseAuth from "./preesent-components/falseAuth";
 
@@ -15,7 +15,7 @@ const NavBar = observer(() => {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <NavLink style={{color: "white"}} to={SHOP_ROUTE}>Кучерявый принт</NavLink>
+                <NavLink style={{color: "lightgreen"}} to={MAIN_ROUTE}>Spotify</NavLink>
                 {user.isAuth ? <TrueAuth/> : <FalseAuth/>}
             </Container>
         </Navbar>

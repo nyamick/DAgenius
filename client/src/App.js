@@ -8,10 +8,11 @@ import Footbar from "./components/Footbar";
 import {Container, Spinner} from "react-bootstrap";
 import {Context} from "./index";
 import {check} from "./http/userAPI";
-import {getDeviceFromBasket} from "./http/deviceAPI";
+import {getMusicFromPlaylist} from "./http/musicAPI";
+import "./bgstyle.css"
 
 const App = observer(() => {
-    const {user, basket} = useContext(Context);
+    const {user, playlist} = useContext(Context);
     const [loading, setLoading] = useState(false);
 
     //check authorization
@@ -31,20 +32,23 @@ const App = observer(() => {
     //Loading Basket
     useEffect(() => {
        if(user.isAuth === false) {
-           basket.setDeleteAllDeviceFromBasket();
-           const savedBasket = JSON.parse(localStorage.getItem("basket"));
-           for (let key in savedBasket) {
-               basket.setBasket(savedBasket[key]);
+           playlist.setDeleteAllMusicFromPlaylist();
+           const savedPlaylist = JSON.parse(localStorage.getItem("playlist"));
+           for (let key in savedPlaylist) {
+               playlist.setPlaylist(savedPlaylist[key]);
            }
+           console.log("Not Added")
        } else if(user.isAuth === true){
-           basket.setDeleteAllDeviceFromBasket();
-           getDeviceFromBasket().then(data => {
+           playlist.setDeleteAllMusicFromPlaylist();
+           getMusicFromPlaylist().then(data => {
                for (let key in data) {
-                   basket.setBasket(data[key], true);
+                   playlist.setPlaylist(data[key], true);
+
                }
+               console.log("Added")
            })
        }
-    }, [basket, user.isAuth]);
+    }, [playlist, user.isAuth]);
 
     if(loading) {
         return <Spinner animation="grow"/>
@@ -53,7 +57,7 @@ const App = observer(() => {
     return (
         <BrowserRouter>
             <NavBar/>
-            <Container>
+            <Container className="bgstyle">
                 <AppRouter/>
             </Container>
             <Footbar/>

@@ -13,7 +13,7 @@ const AdminPanel = observer(() => {
             <div className="d-flex align-items-center mr-3">
                 <Button
                     className={"mr-3"}
-                    variant={"outline-light"}
+                    variant={"outline-success"}
                     onClick={() => {navigate(ADMIN_ROUTE)}}
                 >
                     Админ панель

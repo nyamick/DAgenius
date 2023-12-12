@@ -4,28 +4,28 @@ import {Context} from "../index";
 import {ListGroup} from "react-bootstrap";
 
 const TypeBar = observer(() => {
-    const {device} = useContext(Context);
+    const {music} = useContext(Context);
 
-    const getAllDevices = () => {
-        device.setSelectedType("all");
-        device.setSelectedBrand("all");
+    const getAllMusics = () => {
+        music.setSelectedType("all");
+        music.setSelectedBrand("all");
     }
 
     return (
         <ListGroup>
             <ListGroup.Item
                 style={{cursor: "pointer"}}
-                active={"all" === device.selectedType}
-                onClick={getAllDevices}
+                active={"all" === music.selectedType}
+                onClick={getAllMusics}
             >
                 All
             </ListGroup.Item>
-            {device.types.map(type =>
+            {music.types.map(type =>
                 <ListGroup.Item
                     style={{cursor: "pointer"}}
-                    active={type.id === device.selectedType.id}
+                    active={type.id === music.selectedType.id}
                     key={type.id}
-                    onClick={() => device.setSelectedType(type)}
+                    onClick={() => music.setSelectedType(type)}
                 >
                     {type.name}
                 </ListGroup.Item>

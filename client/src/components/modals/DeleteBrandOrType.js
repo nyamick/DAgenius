@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dropdown, Modal} from "react-bootstrap";
-import {deleteBrand, deleteType, fetchBrands, fetchTypes} from "../../http/deviceAPI";
+import {deleteBrand, deleteType, fetchBrands, fetchTypes} from "../../http/musicAPI";
 
 const DeleteBrandOrType = ({show, onHide, showSuccessMsgFunc}) => {
     const [brandOrType, setBrandOrType] = useState("Brand");

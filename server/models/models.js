@@ -8,20 +8,19 @@ const User = sequelize.define('user', {
     role: {type: DataTypes.STRING, defaultValue: "USER"},
 });
 
-const Basket = sequelize.define('basket', {
+const Playlist = sequelize.define('playlist', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 });
 
-const BasketDevice = sequelize.define('basket_device', {
+const PlaylistMusic = sequelize.define('playlist_musics', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    deviceId: {type: DataTypes.INTEGER},
+    musicId: {type: DataTypes.INTEGER},
 });
 
-const Device = sequelize.define('device', {
+const Music = sequelize.define('music', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
-    price: {type: DataTypes.INTEGER, allowNull: false},
-    rating: {type: DataTypes.INTEGER, defaultValue: 0},
+    author: {type: DataTypes.STRING, allowNull: false},
     img: {type: DataTypes.STRING, allowNull: false},
 });
 
@@ -35,75 +34,21 @@ const Brand = sequelize.define('brand', {
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
 });
 
-const Rating = sequelize.define('rating', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    rate: {type: DataTypes.INTEGER, allowNull: false},
-});
-
-const DeviceInfo = sequelize.define('device_info', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.STRING, allowNull: false},
-});
-
 const TypeBrand = sequelize.define('type_brand', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
-const Orders = sequelize.define('orders', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    complete: {type: DataTypes.BOOLEAN, defaultValue: false},
-    mobile: {type: DataTypes.STRING(25), allowNull: false},
-    userId: {type: DataTypes.INTEGER, allowNull: true},
-})
+User.hasOne(Playlist);
+Playlist.belongsTo(User);
 
-const OrderDevice = sequelize.define('order_device', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    deviceId: {type: DataTypes.INTEGER, allowNull: false},
-    orderId: {type: DataTypes.INTEGER, allowNull: false},
-    count: {type: DataTypes.INTEGER, allowNull: false},
-})
+Playlist.hasMany(PlaylistMusic);
+PlaylistMusic.belongsTo(Playlist);
 
-User.hasOne(Basket);
-Basket.belongsTo(User);
+Type.hasMany(Music);
+Music.belongsTo(Type);
 
-User.hasMany(Rating);
-Rating.belongsTo(User);
-
-User.hasMany(Orders);
-Orders.belongsTo(User,
-    {
-        foreignKey: { name: 'userId' },
-        onDelete: 'CASCADE',
-    }
-);
-
-Orders.hasMany(OrderDevice);
-OrderDevice.belongsTo(Orders,
-    {
-        foreignKey: { name: 'orderId' },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    }
-);
-
-Basket.hasMany(BasketDevice);
-BasketDevice.belongsTo(Basket);
-
-Type.hasMany(Device);
-Device.belongsTo(Type);
-
-Type.hasMany(Device);
-Device.belongsTo(Type);
-
-Brand.hasMany(Device);
-Device.belongsTo(Brand);
-
-Device.hasMany(Rating);
-Rating.belongsTo(Device);
-
-Device.hasMany(DeviceInfo, {as: 'info'});
-DeviceInfo.belongsTo(Device);
+Brand.hasMany(Music);
+Music.belongsTo(Brand);
 
 Type.belongsToMany(Brand, {through: TypeBrand});
 Brand.belongsToMany(Type, {through: TypeBrand});
@@ -111,15 +56,11 @@ Brand.belongsToMany(Type, {through: TypeBrand});
 
 module.exports = {
     User,
-    Basket,
-    BasketDevice,
-    Device,
+    Playlist,
+    PlaylistMusic,
+    Music,
     Type,
     Brand,
-    Rating,
     TypeBrand,
-    DeviceInfo,
-    Orders,
-    OrderDevice
 }
 

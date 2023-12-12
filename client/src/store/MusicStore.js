@@ -1,10 +1,10 @@
 import {makeAutoObservable} from "mobx";
 
-export default class DeviceStore {
+export default class MusicStore {
     constructor() {
         this._types = [];
         this._brands = [];
-        this._devices = [];
+        this._musics = [];
         this._selectedType = {};
         this._selectedBrand = {};
         this._page = 1;
@@ -27,8 +27,8 @@ export default class DeviceStore {
     setBrands(brands) {
         this._brands = brands;
     }
-    setDevices(devices) {
-        this._devices = devices;
+    setMusics(musics) {
+        this._musics = musics;
     }
     setPage(page) {
         this._page = page;
@@ -43,8 +43,8 @@ export default class DeviceStore {
     get brands() {
         return this._brands;
     }
-    get devices() {
-        return this._devices;
+    get musics() {
+        return this._musics;
     }
     get selectedType() {
         return this._selectedType;

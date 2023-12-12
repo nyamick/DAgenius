@@ -1,36 +1,25 @@
 const { Op } = require("sequelize");
 const uuid = require('uuid');
 const path = require('path');
-const {Device, DeviceInfo, Type, Brand, OrderDevice, BasketDevice} = require('../models/models');
+const {Music, Type, Brand, PlaylistMusic} = require('../models/models');
 const apiError = require('./../error/apiError');
 
-class DeviceController {
+class MusicController {
     async create(req, res, next) {
         try {
-            let {name, price, brandId, typeId, info} = req.body;
+            let {name, author, brandId, typeId} = req.body;
             const {img} = req.files;
             let fileName = uuid.v4() + ".jpg";
             img.mv(path.resolve(__dirname, '..', 'static', fileName));
-            const device = await Device.create({
+            const music = await Music.create({
                 name,
-                price,
+                author,
                 brandId,
                 typeId,
                 img: fileName
             });
 
-            if(info) {
-                info = JSON.parse(info);
-                info.forEach(i => {
-                    DeviceInfo.create({
-                        title: i.title,
-                        description: i.description,
-                        deviceId: device.id
-                    })
-                })
-            }
-
-            return res.json(device);
+            return res.json(music);
         } catch (e) {
             next(apiError.badRequest(e.message));
         }
@@ -43,9 +32,9 @@ class DeviceController {
             page = page || 1
             limit = limit || 9
             let offset = page * limit - limit
-            let devices;
+            let musics;
             if (!brandId && !typeId) {
-                devices = await Device.findAndCountAll({
+                musics = await Music.findAndCountAll({
                     include: [
                         {model: Brand},
                         {model: Type},
@@ -54,7 +43,7 @@ class DeviceController {
                     offset})
             }
             if (brandId && !typeId) {
-                devices = await Device.findAndCountAll({
+                musics = await Music.findAndCountAll({
                     where:{brandId},
                     include: [
                         {model: Brand},
@@ -64,7 +53,7 @@ class DeviceController {
                     offset
                 })}
             if (!brandId && typeId) {
-                devices = await Device.findAndCountAll({
+                musics = await Music.findAndCountAll({
                     where:{typeId},
                     include: [
                         {model: Brand},
@@ -74,7 +63,7 @@ class DeviceController {
                     offset
                 })}
             if (brandId && typeId) {
-                devices = await Device.findAndCountAll({
+                musics = await Music.findAndCountAll({
                     where:{typeId, brandId},
                     include: [
                         {model: Brand},
@@ -83,13 +72,13 @@ class DeviceController {
                     limit,
                     offset
                 })}
-            return res.json(devices)
+            return res.json(musics)
         } catch (e) {
             next(apiError.badRequest(e.message));
         }
     }
 
-    async getSearchAllDeviceByName(req, res, next) {
+    async getSearchAllMusicsByName(req, res, next) {
         try {
             let {limit, page, name, filter} = req.query;
 
@@ -97,8 +86,8 @@ class DeviceController {
             limit = limit || 7;
             let offset = page * limit - limit
             if(filter === "All") {
-                const devices =  await Device.findAndCountAll({
-                    attributes: ["name", "price", "img", "id"],
+                const musics =  await Music.findAndCountAll({
+                    attributes: ["name", "author", "img", "id"],
                     where:
                         {
                             name: {
@@ -119,10 +108,10 @@ class DeviceController {
                     offset,
                 })
 
-                return res.json(devices);
+                return res.json(musics);
             } else {
-                const devices =  await Device.findAndCountAll({
-                    attributes: ["name", "price", "img", "id", "brandId", "typeId"],
+                const musics =  await Music.findAndCountAll({
+                    attributes: ["name", "author", "img", "id", "brandId", "typeId"],
                     where:
                         {
                             name: {
@@ -152,7 +141,7 @@ class DeviceController {
                 })
 
 
-                return res.json(devices);
+                return res.json(musics);
             }
         } catch (e) {
             next(apiError.badRequest(e.message));
@@ -162,15 +151,14 @@ class DeviceController {
     async getOne(req, res, next) {
         try {
             const {id} = req.params;
-            let devices = await Device.findOne({
+            let musics = await Music.findOne({
                 where: {id},
                 include: [
-                    {model: DeviceInfo, as: 'info'},
                     {model: Type},
                     {model: Brand},
                 ]
             });
-            return res.json(devices);
+            return res.json(musics);
         } catch (e) {
             next(apiError.badRequest(e.message));
         }
@@ -179,18 +167,17 @@ class DeviceController {
     async delete(req, res) {
         try {
             const {id} = req.params;
-            await Device.findOne({where:{id}})
+            await Music.findOne({where:{id}})
                 .then( async data => {
                     if(data) {
-                        await Device.destroy({where:{id}}).then(() => {
-                            return res.json("Device deleted");
+                        await Music.destroy({where:{id}}).then(() => {
+                            return res.json("Music deleted");
                         })
                     } else {
-                        return res.json("This Device doesn't exist in DB");
+                        return res.json("This Music doesn't exist");
                     }
 
-                    await OrderDevice.destroy({where:{deviceId: id}})
-                    await BasketDevice.destroy({where:{deviceId: id}})
+                    await PlaylistMusic.destroy({where:{deviceId: id}})
                 })
         } catch (e) {
             return res.json(e);
@@ -200,16 +187,16 @@ class DeviceController {
     async update(req, res) {
         try {
             const {id} = req.params;
-            const {brandId, typeId, name, price, info} = req.body;
+            const {brandId, typeId, name, author} = req.body;
 
-            await Device.findOne({where:{id}})
+            await Music.findOne({where:{id}})
                 .then( async data => {
                     if(data) {
                         let newVal = {};
                         brandId ? newVal.brandId = brandId : false;
                         typeId ? newVal.typeId = typeId : false;
                         name ? newVal.name = name : false;
-                        price ? newVal.price = price : false;
+                        author ? newVal.author = author : false;
 
                         if(req.files) {
                             const {img} = req.files;
@@ -219,33 +206,13 @@ class DeviceController {
                             newVal.img = fileName;
                         }
 
-                        if(info) {
-                            const parseInfo = JSON.parse(info);
-                            for (const item of parseInfo) {
-                                await DeviceInfo.findOne({where:{id: item.id}}).then( async data => {
-                                    if(data) {
-                                        await DeviceInfo.update({
-                                            title: item.title,
-                                            description: item.description
-                                        }, {where:{id: item.id}})
-                                    } else {
-                                        await DeviceInfo.create({
-                                            title: item.title,
-                                            description: item.description,
-                                            deviceId: id
-                                        })
-                                    }
-                                })
-                            }
-                        }
-
-                        await Device.update({
+                        await Music.update({
                             ...newVal
                         }, {where:{id}} ).then(() => {
-                            return res.json("Device updated");
+                            return res.json("Music updated");
                         })
                     } else {
-                        return res.json("This Device doesn't exist in DB");
+                        return res.json("This Music doesn't exist");
                     }
                 })
             } catch (e) {
@@ -254,4 +221,4 @@ class DeviceController {
     }
 }
 
-module.exports = new DeviceController();
+module.exports = new MusicController();

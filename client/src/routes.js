@@ -1,28 +1,22 @@
 import {
     ADMIN_ROUTE,
-    BASKET_ROUTE, DEVICE_EDIT_ROUTE,
-    DEVICE_ROUTE,
+    PLAYLIST_ROUTE, DEVICE_EDIT_ROUTE,
+    MUSIC_ROUTE,
     LOGIN_ROUTE, ORDERING_ROUTE,
     ORDERS_ROUTE,
     REGISTRATION_ROUTE,
-    SHOP_ROUTE,
+    MAIN_ROUTE,
     CONTACTS,
     SIZES,
     SHIPPINGPAYMANT
 } from './utils/consts';
 
 import Admin from "./pages/Admin";
-import Orders from "./pages/Orders";
-import Shop from "./pages/Shop";
+import Main from "./pages/Main";
 import Auth from "./pages/Auth";
-import DevicePage from "./pages/DevicePage";
-import BasketCard from "./pages/BasketCard";
-import OneOrder from "./pages/OneOrder";
-import DevicePageEdit from "./pages/DevicePageEdit";
-import Ordering from "./pages/Ordering";
-import Contacts from "./pages/Contacts";
-import Sizes from "./pages/Sizes";
-import ShippingPaymant from "./pages/ShippingPayment";
+import MusicPage from "./pages/MusicPage";
+import PlaylistPage from "./pages/PlaylistPage";
+import MusicEditPage from "./pages/MusicEditPage";
 
 export const authRouters = [
     {
@@ -30,28 +24,16 @@ export const authRouters = [
         Component: Admin
     },
     {
-        path: ORDERS_ROUTE,
-        Component: Orders
-    },
-    {
-        path: ORDERS_ROUTE + '/:id',
-        Component: OneOrder
-    },
-    {
         path: DEVICE_EDIT_ROUTE + '/:id',
-        Component: DevicePageEdit
+        Component: MusicEditPage
     },
 
 ];
 
 export const publicRouters = [
     {
-        path: ORDERING_ROUTE,
-        Component: Ordering
-    },
-    {
-        path: SHOP_ROUTE,
-        Component: Shop
+        path: MAIN_ROUTE,
+        Component: Main
     },
     {
         path: LOGIN_ROUTE,
@@ -62,23 +44,11 @@ export const publicRouters = [
         Component: Auth
     },
     {
-        path: DEVICE_ROUTE + '/:id',
-        Component: DevicePage
+        path: MUSIC_ROUTE + '/:id',
+        Component: MusicPage
     },
     {
-        path: BASKET_ROUTE,
-        Component: BasketCard
-    },
-    {
-        path: CONTACTS,
-        Component: Contacts
-    },
-    {
-        path: SIZES,
-        Component: Sizes
-    },
-    {
-        path: SHIPPINGPAYMANT,
-        Component: ShippingPaymant
+        path: PLAYLIST_ROUTE,
+        Component: PlaylistPage
     },
 ];

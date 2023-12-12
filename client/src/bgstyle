@@ -1,0 +1,4 @@
+body {
+  background-color: #333; /* Set the desired dark background color */
+  color: #fff; /* Set the desired text color for better visibility */
+}
