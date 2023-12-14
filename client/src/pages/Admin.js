@@ -149,12 +149,12 @@ const Admin = () => {
                                     </Row>
                                     <Row>
                                         <Col xs={12}>
-                                            Brand: {brand.name}
+                                            Brand: {brand?.name}
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={12}>
-                                            Type: {type.name}
+                                            Type: {type?.name}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -166,10 +166,6 @@ const Admin = () => {
                     )
                 })}
             </ListGroup>
-
-            <Pagination size="sm" className="mt-4 mb-4 outline-success" style={{margin: "0 auto"}}>
-                {searchedMusic && searchedMusic.length > 0 ? pages : false}
-            </Pagination>
         </Container>
     );
 };

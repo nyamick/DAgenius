@@ -100,7 +100,7 @@ const MusicEditPage = observer(() => {
                                 <Dropdown.Toggle>{selectBrand.name || "Choose Brand"}</Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {music.brands.map(brand => {
-                                        return brand.name === selectBrand.name ?
+                                        return brand.name === selectBrand?.name ?
                                             <Dropdown.Item
                                                 key={brand.id}
                                                 disabled
@@ -127,10 +127,10 @@ const MusicEditPage = observer(() => {
                         </Col>
                         <Col xs={11}>
                             <Dropdown className="mt-2 mb-2">
-                                <Dropdown.Toggle>{selectType.name || "Choose Type"}</Dropdown.Toggle>
+                                <Dropdown.Toggle>{selectType?.name || "Choose Type"}</Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {music.types.map(type => {
-                                        return type.name === selectType.name ?
+                                        return type.name === selectType?.name ?
                                             <Dropdown.Item
                                                 key={type.id}
                                                 disabled
@@ -192,7 +192,7 @@ const MusicEditPage = observer(() => {
 
                     <Row className="mt-5">
                         <Col xs={12}>
-                            {isDisabledPutBtn ? <Button disabled>Update Device</Button> : <Button onClick={putMusic} variant="outline-success">Обновить информацию</Button>}
+                            {<Button onClick={putMusic} variant="outline-success">Обновить информацию</Button>}
                             <Button className="ml-5" variant="outline-danger" onClick={handleShow}>Удалить трек</Button>
                         </Col>
                     </Row>

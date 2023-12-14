@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+ import {makeAutoObservable} from "mobx";
 import {deleteMusicFromPlaylist} from "../http/musicAPI";
 
 export default class PlaylistStoreStore {
@@ -20,8 +20,8 @@ export default class PlaylistStoreStore {
     }
 
     setPlaylist(item, isAuth = false) {
-        const checkDeviceInBasket = this._playlist.findIndex(device => device.id === item.id);
-        if(checkDeviceInBasket < 0) {
+        const checkMusicInPlaylist = this._playlist.findIndex(music => music.id === item?.id);
+        if(checkMusicInPlaylist < 0) {
             this._playlist = [...this._playlist, { count: 1, ...item}];
         }
 

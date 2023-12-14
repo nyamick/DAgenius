@@ -83,7 +83,7 @@ class MusicController {
             let {limit, page, name, filter} = req.query;
 
             page = page || 1;
-            limit = limit || 7;
+            limit = limit || 100;
             let offset = page * limit - limit
             if(filter === "All") {
                 const musics =  await Music.findAndCountAll({
@@ -177,7 +177,7 @@ class MusicController {
                         return res.json("This Music doesn't exist");
                     }
 
-                    await PlaylistMusic.destroy({where:{deviceId: id}})
+                    await PlaylistMusic.destroy({where:{musicId: id}})
                 })
         } catch (e) {
             return res.json(e);

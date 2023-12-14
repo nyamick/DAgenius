@@ -8,15 +8,15 @@ const MusicItem = ({music}) => {
     const navigate = useNavigate();
 
     return (
-        <div md={12} className="mt-2 row" onClick={() => navigate(MUSIC_ROUTE + '/' + music.id)}>
+        <Col md={12} className="mt-2 row" onClick={() => navigate(MUSIC_ROUTE + '/' + music.id)}>
             <Card
                 className="p-2"
-                style={{height: 100,cursor: "pointer"}}
+                style={{height: "100px",cursor: "pointer", width:"800px"}}
                 border={"Light"}
             >
                 <Row>
                     <Col md={3}>
-                        <Image style={{width: "80%"}} src={process.env.REACT_APP_API_URL + music.img}/>
+                        <Image style={{width: "80px ", height:"80px"}} src={process.env.REACT_APP_API_URL + music.img}/>
                     </Col>
                     <Col md={3}>
 
@@ -33,7 +33,7 @@ const MusicItem = ({music}) => {
                 </Row>
 
             </Card>
-        </div>
+        </Col>
     );
 };
 
