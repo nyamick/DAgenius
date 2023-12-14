@@ -9,6 +9,14 @@ const CreateMusic = observer(({show, onHide}) => {
     const [name, setName] = useState('');
     const [author, setAuthor] = useState('');
     const [file, setFile] = useState(null);
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    //юзэфект для поведения кнопки добавить
+    useEffect(() => {
+        // Check if all required fields are filled
+        setIsFormValid(!!name && !!author && file && music.selectedBrand.id && music.selectedType.id);
+    }, [name, author, file, music.selectedBrand.id, music.selectedType.id]);
+
 
     useEffect(() => {
         fetchTypes().then(data => music.setTypes(data));
@@ -90,7 +98,7 @@ const CreateMusic = observer(({show, onHide}) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>
-                <Button variant="outline-success" onClick={addDevice}>Добавить</Button>
+                <Button variant="outline-success" onClick={addDevice} disabled={!isFormValid}>Добавить</Button>
             </Modal.Footer>
         </Modal>
     );
