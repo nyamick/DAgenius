@@ -60,21 +60,23 @@ const MusicEditPage = observer(() => {
     }
 
     useEffect(() => {
-
-
-        if(musicCurr && musicCurr.brand && musicCurr.type) {
-            if(musicCurr.brand.name !== selectBrand.name ||
-                musicCurr.type.name !== selectType.name ||
-                musicCurr.name !== name ||
-                musicCurr.author !== author ||
-                img
-            ) {
-                setDisabledPutBtn(false);
-            } else {
-                setDisabledPutBtn(true);
-            }
+        if (
+            name.length > 0 &&
+            author.length > 0 &&
+            selectBrand.name &&
+            selectType.name &&
+            (name !== musicCurr.name ||
+                author !== musicCurr.author ||
+                selectBrand.id !== musicCurr.brand.id ||
+                selectType.id !== musicCurr.type.id)
+        ) {
+            setDisabledPutBtn(false);
+        } else {
+            setDisabledPutBtn(true);
         }
-    }, [name, selectBrand, selectType, author, img]);
+    }, [name, selectBrand, selectType, author, musicCurr]);
+
+
 
     useEffect(() => {
         fetchOneMusic(id).then(data => {
@@ -192,7 +194,9 @@ const MusicEditPage = observer(() => {
 
                     <Row className="mt-5">
                         <Col xs={12}>
-                            {<Button onClick={putMusic} variant="outline-success">Обновить информацию</Button>}
+                            <Button onClick={putMusic} variant="outline-success" disabled={isDisabledPutBtn}>
+                                Обновить информацию
+                            </Button>
                             <Button className="ml-5" variant="outline-danger" onClick={handleShow}>Удалить трек</Button>
                         </Col>
                     </Row>

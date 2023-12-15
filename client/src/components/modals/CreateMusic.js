@@ -92,6 +92,7 @@ const CreateMusic = observer(({show, onHide}) => {
                     <Form.Control
                         className="mt-3"
                         type="file"
+                        accept=".jpg"
                         onChange={selectFile}
                     />
                 </Form>
