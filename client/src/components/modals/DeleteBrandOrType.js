@@ -1,105 +1,128 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Dropdown, Modal} from "react-bootstrap";
-import {deleteBrand, deleteType, fetchBrands, fetchTypes} from "../../http/musicAPI";
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Modal } from 'react-bootstrap';
+import { deleteBrand, deleteType, fetchBrands, fetchTypes } from '../../http/musicAPI';
 
-const DeleteBrandOrType = ({show, onHide, showSuccessMsgFunc}) => {
-    const [brandOrType, setBrandOrType] = useState("Brand");
+const DeleteBrandOrType = ({ show, onHide, showSuccessMsgFunc }) => {
+    const [brandOrType, setBrandOrType] = useState('Brand');
     const [brands, setBrands] = useState([]);
     const [types, setTypes] = useState([]);
-    const [selectBrand, setSelectBrand] = useState({name: "A Brand not selected"});
-    const [selectType, setSelectType] = useState({name: "A type not selected"});
+    const [selectBrand, setSelectBrand] = useState({ name: 'A Brand not selected' });
+    const [selectType, setSelectType] = useState({ name: 'A type not selected' });
     const [showMsgErr, setShowMsgErr] = useState(false);
     const [msgErr, setMsgErr] = useState('');
+    const [update, setUpdate] = useState(false);
 
     useEffect(() => {
-        fetchTypes().then(data => setTypes(data));
-        fetchBrands().then(data => setBrands(data));
-    }, []);
+        fetchTypes().then((data) => setTypes(data));
+        fetchBrands().then((data) => setBrands(data));
+        const reloadPage = () => {
+            window.location.reload();
+        };
+
+        // Подписываемся на изменения состояния update
+        if (update) {
+            reloadPage();
+        }
+    }, [update]);
 
     const Delete = async () => {
-        if(brandOrType === "Brand") {
-            if(selectBrand.name !== "A Brand not selected") {
-                await deleteBrand(selectBrand.id).then(data => {
+        if (brandOrType === 'Brand') {
+            if (selectBrand.name !== 'A Brand not selected') {
+                await deleteBrand(selectBrand.id).then((data) => {
                     showSuccessMsgFunc(data);
                     onHide();
-                    setSelectBrand({name: "A Brand not selected"});
+                    setSelectBrand({ name: 'A Brand not selected' });
+                    setUpdate((prevUpdate) => !prevUpdate); // Trigger auto-refresh
                 });
             } else {
-                setMsgErr("Please choose Brand");
+                setMsgErr('Please choose Brand');
                 setShowMsgErr(true);
             }
         } else {
-            if(selectType.name !== "A Type not selected") {
-                await deleteType(selectType.id).then(data => {
+            if (selectType.name !== 'A Type not selected') {
+                await deleteType(selectType.id).then((data) => {
                     showSuccessMsgFunc(data);
                     onHide();
-                    setSelectType({name: "A type not selected"});
+                    setSelectType({ name: 'A type not selected' });
+                    setUpdate((prevUpdate) => !prevUpdate); // Trigger auto-refresh
                 });
             } else {
-                setMsgErr("Please choose Type");
+                setMsgErr('Please choose Type');
                 setShowMsgErr(true);
             }
         }
     };
 
-    useEffect(() => setShowMsgErr(false), [selectType, selectBrand, brandOrType])
+    useEffect(() => setShowMsgErr(false), [selectType, selectBrand, brandOrType, update]);
 
     return (
-        <Modal
-            show={show}
-            onHide={onHide}
-            size="lg"
-            centered
-        >
+        <Modal show={show} onHide={onHide} size="lg" centered>
             <Modal.Header closeButton>
-                <Modal.Title>
-                    Delete Type or Brand
-                </Modal.Title>
+                <Modal.Title>Delete Type or Brand</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {showMsgErr &&
-                    <>
-                        <p style={{color: "red", textAlign: "center"}}>{msgErr}</p>
-                    </>
-                }
+                {showMsgErr && <p style={{ color: 'red', textAlign: 'center' }}>{msgErr}</p>}
 
                 Choose Category:
-                <Dropdown className="mb-3" style={{margin: "0 auto"}}>
+                <Dropdown className="mb-3" style={{ margin: '0 auto' }}>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                         {brandOrType}
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        {brandOrType === "Brand" ? <Dropdown.Item disabled>Brand</Dropdown.Item> : <Dropdown.Item onClick={() => setBrandOrType("Brand")}>Brand</Dropdown.Item>}
-                        {brandOrType === "Type" ? <Dropdown.Item disabled>Type</Dropdown.Item> : <Dropdown.Item onClick={() => setBrandOrType("Type")}>Type</Dropdown.Item>}
+                        {brandOrType === 'Brand' ? (
+                            <Dropdown.Item disabled>Brand</Dropdown.Item>
+                        ) : (
+                            <Dropdown.Item onClick={() => setBrandOrType('Brand')}>Brand</Dropdown.Item>
+                        )}
+                        {brandOrType === 'Type' ? (
+                            <Dropdown.Item disabled>Type</Dropdown.Item>
+                        ) : (
+                            <Dropdown.Item onClick={() => setBrandOrType('Type')}>Type</Dropdown.Item>
+                        )}
                     </Dropdown.Menu>
                 </Dropdown>
 
-                Choose item of {brandOrType === "Brand" ? "Brand" : "Type"}
-                <Dropdown className="mb-3" style={{margin: "0 auto"}}>
+                Choose item of {brandOrType === 'Brand' ? 'Brand' : 'Type'}
+                <Dropdown className="mb-3" style={{ margin: '0 auto' }}>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        {brandOrType === "Brand" ? selectBrand.name : selectType.name}
+                        {brandOrType === 'Brand' ? selectBrand.name : selectType.name}
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        {brandOrType === "Brand" ?
-                            brands.map(({id, name}) =>
-                                selectBrand.name === name ? <Dropdown.Item disabled key={id}>{name}</Dropdown.Item> : <Dropdown.Item  key={id} onClick={() => setSelectBrand({id, name})}>{name}</Dropdown.Item>
+                        {brandOrType === 'Brand'
+                            ? brands.map(({ id, name }) =>
+                                selectBrand.name === name ? (
+                                    <Dropdown.Item disabled key={id}>
+                                        {name}
+                                    </Dropdown.Item>
+                                ) : (
+                                    <Dropdown.Item key={id} onClick={() => setSelectBrand({ id, name })}>
+                                        {name}
+                                    </Dropdown.Item>
+                                )
                             )
-                            :
-                            types.map(({id, name}) =>
-                                selectType.name === name ? <Dropdown.Item disabled  key={id}>{name}</Dropdown.Item> : <Dropdown.Item  key={id} onClick={() => setSelectType({id, name})}>{name}</Dropdown.Item>
-                            )
-                        }
-
+                            : types.map(({ id, name }) =>
+                                selectType.name === name ? (
+                                    <Dropdown.Item disabled key={id}>
+                                        {name}
+                                    </Dropdown.Item>
+                                ) : (
+                                    <Dropdown.Item key={id} onClick={() => setSelectType({ id, name })}>
+                                        {name}
+                                    </Dropdown.Item>
+                                )
+                            )}
                     </Dropdown.Menu>
                 </Dropdown>
-
-
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="outline-danger" onClick={onHide}>Close</Button>
-                <Button variant="outline-success" onClick={Delete}>Delete</Button>
+                <Button variant="outline-danger" onClick={onHide}>
+                    Close
+                </Button>
+                <Button variant="outline-success" onClick={Delete}>
+                    Delete
+                </Button>
             </Modal.Footer>
         </Modal>
     );

@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+
+
 import {
     Button,
     Col,
@@ -65,6 +67,9 @@ const Admin = () => {
     }, [filter, successMsg])
 
 
+
+
+
     const fetchMusic = () => {
         getAllMusicsInAdminPage(searchMusic, currentPage, filter).then(({count, rows}) => {
             setSearchedMusic(rows);
@@ -114,16 +119,16 @@ const Admin = () => {
             <CreateType show={typeVisible} onHide={() => setTypeVisible(false)}/>
             <DeleteBrandOrType show={deleteBrandOrType} onHide={() => setDeleteBrandOrType(false)} showSuccessMsgFunc={showSuccessMsgFunc}/>
 
-            <Dropdown className="mt-5 mb-3" style={{margin: "0 auto"}}>
-                <Dropdown.Toggle variant="outline-success" id="dropdown-basic">
-                    {filter}
-                </Dropdown.Toggle>
+            {/*<Dropdown className="mt-5 mb-3" style={{margin: "0 auto"}}>*/}
+            {/*    <Dropdown.Toggle variant="outline-success" id="dropdown-basic">*/}
+            {/*        {filter}*/}
+            {/*    </Dropdown.Toggle>*/}
 
-                <Dropdown.Menu>
-                    {filter === "All" ? <Dropdown.Item disabled>All</Dropdown.Item> : <Dropdown.Item onClick={() => setFilter("All")}>All</Dropdown.Item>}
-                    {filter === "Without Brand or Type" ? <Dropdown.Item disabled>Without Brand or Type</Dropdown.Item> : <Dropdown.Item onClick={() => setFilter("Without Brand or Type")}>Without Brand or Type</Dropdown.Item>}
-                </Dropdown.Menu>
-            </Dropdown>
+            {/*    <Dropdown.Menu>*/}
+            {/*        {filter === "All" ? <Dropdown.Item disabled>All</Dropdown.Item> : <Dropdown.Item onClick={() => setFilter("All")}>All</Dropdown.Item>}*/}
+            {/*        {filter === "Without Brand or Type" ? <Dropdown.Item disabled>Without Brand or Type</Dropdown.Item> : <Dropdown.Item onClick={() => setFilter("Without Brand or Type")}>Without Brand or Type</Dropdown.Item>}*/}
+            {/*    </Dropdown.Menu>*/}
+            {/*</Dropdown>*/}
 
 
 
@@ -144,7 +149,7 @@ const Admin = () => {
                                     </Row>
                                     <Row>
                                         <Col xs={12}>
-                                            Price: {author}
+                                            Author: {author}
                                         </Col>
                                     </Row>
                                     <Row>
